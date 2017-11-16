@@ -128,9 +128,9 @@ void ofApp::drawSceneLeft() {
 	ofPushMatrix;
 	{
 		ofTranslate(position);
-		ofSetColor(alphaCam, alphaCam, alphaCam);
+		//ofSetColor(alphaCam, alphaCam, alphaCam);
 		drawOvrvisionSceneLeft();
-		ofSetColor(255, 255, 255);
+		//ofSetColor(255, 255, 255);
 		ofFill();
 		drawPlane();
 	}
@@ -141,9 +141,9 @@ void ofApp::drawSceneRight() {
 	ofPushMatrix;
 	{
 		ofTranslate(position);
-		ofSetColor(alphaCam, alphaCam, alphaCam);
+		//ofSetColor(alphaCam, alphaCam, alphaCam);
 		drawOvrvisionSceneRight();
-		ofSetColor(255, 255, 255);
+		//ofSetColor(255, 255, 255);
 		ofFill();
 		drawPlane();
 	}
@@ -237,15 +237,33 @@ void ofApp::drawPlane() {
 
 void ofApp::drawOvrvisionSceneLeft() {
 	ofTranslate(axis.z * ztexture);
-	//ovrPro.texL.draw(tlx_l, tly_l, brx_l, bry_l);
-	cannyLeft.draw(tlx_l, tly_l, brx_l, bry_l);
+	if (alphaCam != 0)
+	{
+		ofSetColor(alphaCam, alphaCam, alphaCam, alphaCam);
+		ovrPro.texL.draw(tlx_l, tly_l, brx_l, bry_l);
+	}
+	if (alphaCanny != 0)
+	{
+		ofSetColor(alphaCanny, alphaCanny, alphaCanny, alphaCanny);
+		cannyLeft.draw(tlx_l, tly_l, brx_l, bry_l);
+	}
+	ofSetColor(255, 255, 255, 255);
 	ofTranslate(axis.z * -ztexture);
 }
 
 void ofApp::drawOvrvisionSceneRight() {
 	ofTranslate(axis.z * ztexture);
-	//ovrPro.texR.draw(tlx_r, tly_r, brx_r, bry_r);
-	cannyRight.draw(tlx_r, tly_r, brx_r, bry_r);
+	if (alphaCam != 0)
+	{
+		ofSetColor(alphaCam, alphaCam, alphaCam, alphaCam);
+		ovrPro.texR.draw(tlx_r, tly_r, brx_r, bry_r);
+	}
+	if (alphaCanny != 0)
+	{
+		ofSetColor(alphaCanny, alphaCanny, alphaCanny, alphaCanny);
+		cannyRight.draw(tlx_r, tly_r, brx_r, bry_r);
+	}
+	ofSetColor(255, 255, 255, 255);
 	ofTranslate(axis.z * -ztexture);
 }
 
@@ -253,30 +271,44 @@ void ofApp::updateAlpha()
 {
 	if (isCamVisible)
 	{
-		alphavalue += 0.03f;
-		if (alphavalue >= 1.0f)
-			alphavalue = 1.0f;
+		alphaCam += 8;
+		if (alphaCam >= ALPHA_MAX)
+			alphaCam = ALPHA_MAX;
 	}
 	else
 	{
-		alphavalue -= 0.03f;
-		if (alphavalue <= 0.0f)
-			alphavalue = 0.0f;
+		alphaCam -= 8;
+		if (alphaCam <= 0)
+			alphaCam = 0;
 	}
+
 	if (isTextVisible)
 	{
-		alphavalue_ += 0.03f;
-		if (alphavalue_ >= 1.0f)
-			alphavalue_ = 1.0f;
+		alphaText += 8;
+		if (alphaText >= ALPHA_MAX)
+			alphaText = ALPHA_MAX;
 	}
 	else
 	{
-		alphavalue_ -= 0.03f;
-		if (alphavalue_ <= 0.0f)
-			alphavalue_ = 0.0f;
+		alphaText -= 8;
+		if (alphaText <= 0)
+			alphaText = 0;
 	}
-	alphaCam = int(255.0f * alphavalue);
-	alphaText = int(255.0f * alphavalue_);
+
+	if (isCannyVisible)
+	{
+		alphaCanny += 8;
+		if (alphaCanny >= ALPHA_MAX)
+			alphaCanny = ALPHA_MAX;
+	}
+	else
+	{
+		alphaCanny -= 8;
+		if (alphaCanny <= 0)
+			alphaCanny = 0;
+	}
+	//alphaCam = int(255.0f * alphavalue);
+	//alphaText = int(255.0f * alphavalue_);
 }
 
 void ofApp::showFPS()
@@ -310,20 +342,17 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-	if (key == 'a' || key == 49)
+	if (key == 'a' || key == 49) //1
 	{
-		isCamVisible = false;
-		isTextVisible = true;
+		isCamVisible = !isCamVisible;
 	}
-	if (key == 's' || key == 50)
+	if (key == 's' || key == 50)	//2
 	{
-		isCamVisible = true;
-		isTextVisible = false;
+		isTextVisible = !isTextVisible;
 	}
-	if (key == 'd' || key == 48)
+	if (key == 'd' || key == 51) //3
 	{
-		isCamVisible = true;
-		isTextVisible = true;
+		isCannyVisible = !isCannyVisible;
 	}
 }
 

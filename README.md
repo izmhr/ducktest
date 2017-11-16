@@ -30,6 +30,7 @@ download and put them into `$(OF_ROOT)\addons`
 #### Requirement
 
 - Download and extract [OpenCV 3.3.1](https://github.com/opencv/opencv/releases/tag/3.3.1)
+  - **I don't like to use ofxOpenCV cuz it is so obsolete....**
 - Download and unzip [OvrvisionPro SDK for Windows](http://ovrvision.com/setup/) anywhere you want (for example `C:\libraries\ovrvisionprosdk_windows\`)
 - Install [Oculus Runtime for Windows](https://www.oculus.com/setup/)
 - Install [Intel® RealSense™ Camera SR300 Firmware](https://software.intel.com/en-us/realsense-sdk-windows-eol)

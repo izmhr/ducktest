@@ -8,6 +8,8 @@
 #include "OvrPro.h"
 #include <opencv2/opencv.hpp>
 
+#define ALPHA_MAX 255
+
 //to restore and position and size data of those objects which will show at OculusCv1
 struct posAndSize_
 {
@@ -90,12 +92,14 @@ private:
 	ofPoint bry_r;
 
 	// for scene transition
-	float alphavalue = 1.0f;
-	float alphavalue_ = 0.0f;
-	int alphaCam = 255;
+	//float alphavalue = 1.0f;
+	//float alphavalue_ = 0.0f;
+	int alphaCam = ALPHA_MAX;
 	int alphaText = 0;
+	int alphaCanny = 0;
 	bool isCamVisible = true;
 	bool isTextVisible = false;
+	bool isCannyVisible = false;
 
 	// canny filter
 
