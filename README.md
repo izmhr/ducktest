@@ -29,6 +29,7 @@ download and put them into `$(OF_ROOT)\addons`
 
 #### Requirement
 
+- Download and extract [OpenCV 3.3.1](https://github.com/opencv/opencv/releases/tag/3.3.1)
 - Download and unzip [OvrvisionPro SDK for Windows](http://ovrvision.com/setup/) anywhere you want (for example `C:\libraries\ovrvisionprosdk_windows\`)
 - Install [Oculus Runtime for Windows](https://www.oculus.com/setup/)
 - Install [Intel® RealSense™ Camera SR300 Firmware](https://software.intel.com/en-us/realsense-sdk-windows-eol)
@@ -57,6 +58,7 @@ you must modify below.
 * `$(DARKNET_ROOT)`
 * `$(OVRVISION_WINDOWS_ROOT)`
 * `$(RSSDK_ROOT)`
+* `$(CV_ROOT)`
 
 ### IF YOU DIDN'T BUILD YOUR YOLOv2 by yourself
 
@@ -104,6 +106,7 @@ you have to replace some addon files with files in the `modified` floder (to get
 - `ovrvison.dll` (from `$(OVRVISION_ROOT)\bin\x64`)
 - `OpenAl32.dll` (from `$(OVRVISION_ROOT)\bin\x64`)
 - `yolo_cpp_dll.dll` (if you don't build yourself, please get it from `ofxYolo2/dll/`)
+- `opencv_world331.dll` (from `$(CV_ROOT)\build\x64\vc14\bin`) (if you had added cv path to environment variables, don't need this.)
 
 ### Modify YOLO needed files under `bin/data`
 
@@ -111,3 +114,4 @@ you have to replace some addon files with files in the `modified` floder (to get
 - `yolo-obj.weights`
 - `obj.names`
 
+> file names above can be change in `$(OF_ROOT)\addons\ofxYolo2\src\ofxYolo2.cpp`

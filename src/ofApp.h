@@ -6,6 +6,7 @@
 #include "ofxOculusRiftCV1.h"
 #include "ofxGui.h"
 #include "OvrPro.h"
+#include <opencv2/opencv.hpp>
 
 //to restore and position and size data of those objects which will show at OculusCv1
 struct posAndSize_
@@ -96,6 +97,11 @@ private:
 	bool isCamVisible = true;
 	bool isTextVisible = false;
 
+	// canny filter
+
+	ofTexture cannyRight;
+	ofTexture cannyLeft;
+
 	// -------------------------------------
 	// public FUNCTIONS
 	std::vector<posAndSize_> getPositionOfObj();
@@ -106,6 +112,7 @@ private:
 	void drawOvrvisionSceneRight();
 	void updateAlpha();
 	void showFPS();
+	void canny();
 
 public:
 	void setup();

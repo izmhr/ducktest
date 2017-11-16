@@ -5,6 +5,7 @@
     <RSSDK_ROOT>C:\Program Files (x86)\Intel\RSSDK</RSSDK_ROOT>
     <OVRVISION_WINDOWS_ROOT>D:\Users\atsiz\Documents\develop\SEISAKU_ASAHINA\ovrvisionprosdk_windows</OVRVISION_WINDOWS_ROOT>
     <DARKNET_ROOT>D:\Users\atsiz\Documents\develop\SEISAKU_ASAHINA\darknet</DARKNET_ROOT>
+    <CV_ROOT>D:\develop\opencv331</CV_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -19,6 +20,10 @@
     </BuildMacro>
     <BuildMacro Include="DARKNET_ROOT">
       <Value>$(DARKNET_ROOT)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CV_ROOT">
+      <Value>$(CV_ROOT)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>

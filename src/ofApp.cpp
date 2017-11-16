@@ -25,6 +25,10 @@ void ofApp::setup() {
 	ovrh = ovrPro.ovr_camHeight;
 	ovrwt = ovrw / 1000;
 	ovrht = ovrh / 1000;
+	cannyLeft.allocate(ovrw, ovrh, GL_RGBA);
+	cannyRight.allocate(ovrw, ovrh, GL_RGBA);
+	//cannyRight.allocate(ovrw, ovrh, GL_RGBA);
+	// OF_IMAGE_COLOR
 
 	//set parameter - for calibration
 	xp.set("X", 0.45, 0, 10.0); xdp.set("+X", -0.05, -1.0, 1.0);
@@ -69,6 +73,7 @@ void ofApp::update() {
 
 	//update ovr
 	ovrPro.update();
+	canny();
 
 	//billboarding
 	billboarding(position, axis);
@@ -232,13 +237,15 @@ void ofApp::drawPlane() {
 
 void ofApp::drawOvrvisionSceneLeft() {
 	ofTranslate(axis.z * ztexture);
-	ovrPro.texL.draw(tlx_l, tly_l, brx_l, bry_l);
+	//ovrPro.texL.draw(tlx_l, tly_l, brx_l, bry_l);
+	cannyLeft.draw(tlx_l, tly_l, brx_l, bry_l);
 	ofTranslate(axis.z * -ztexture);
 }
 
 void ofApp::drawOvrvisionSceneRight() {
 	ofTranslate(axis.z * ztexture);
-	ovrPro.texR.draw(tlx_r, tly_r, brx_r, bry_r);
+	//ovrPro.texR.draw(tlx_r, tly_r, brx_r, bry_r);
+	cannyRight.draw(tlx_r, tly_r, brx_r, bry_r);
 	ofTranslate(axis.z * -ztexture);
 }
 
@@ -277,6 +284,22 @@ void ofApp::showFPS()
 	std::stringstream strm;
 	strm << "fps: " << ofGetFrameRate();
 	ofSetWindowTitle(strm.str());
+}
+
+void ofApp::canny()
+{
+	cv::Mat ovrLeftSource = cv::Mat(ovrh, ovrw, CV_8UC4, ovrPro.pixL);
+	cv::Mat ovrRightSource = cv::Mat(ovrh, ovrw, CV_8UC4, ovrPro.pixR);
+	cv::Mat cannyLeftResult;
+	cv::Mat cannyRightResult;
+	cv::Canny(ovrLeftSource, cannyLeftResult, 50, 200);
+	cv::Canny(ovrRightSource, cannyRightResult, 50, 200);
+	cv::cvtColor(cannyLeftResult, cannyLeftResult, CV_GRAY2BGRA);
+	cv::cvtColor(cannyRightResult, cannyRightResult, CV_GRAY2BGRA);
+	//cv::imshow("hoge", cannyLeftResult);
+
+	cannyLeft.loadData(cannyLeftResult.ptr(), ovrw, ovrh, GL_RGBA);
+	cannyRight.loadData(cannyRightResult.ptr(), ovrw, ovrh, GL_RGBA);
 }
 
 

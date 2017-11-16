@@ -156,7 +156,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxOculusRiftCV1\src;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src\Common;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src\Resources;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src\Resources\Windows;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\include;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\include\Extras;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVRKernel\src;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVRKernel\src\GL;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVRKernel\src\Kernel;..\..\..\addons\ofxOculusRiftCV1\libs\Logging;..\..\..\addons\ofxOculusRiftCV1\libs\Logging\include;..\..\..\addons\ofxOculusRiftCV1\libs\Logging\src;..\..\..\addons\ofxOculusRiftCV1\libs\Logging\src\internal;..\..\..\addons\ofxOvrvision\src;..\..\..\addons\ofxYolo2\src;..\..\..\addons\ofxRealSense\src;$(RSSDK_ROOT)\include;$(OVRVISION_WINDOWS_ROOT)\include;$(DARKNET_ROOT)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxOculusRiftCV1\src;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src\Common;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src\Resources;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\src\Resources\Windows;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\include;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVR\include\Extras;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVRKernel\src;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVRKernel\src\GL;..\..\..\addons\ofxOculusRiftCV1\libs\LibOVRKernel\src\Kernel;..\..\..\addons\ofxOculusRiftCV1\libs\Logging;..\..\..\addons\ofxOculusRiftCV1\libs\Logging\include;..\..\..\addons\ofxOculusRiftCV1\libs\Logging\src;..\..\..\addons\ofxOculusRiftCV1\libs\Logging\src\internal;..\..\..\addons\ofxOvrvision\src;..\..\..\addons\ofxYolo2\src;..\..\..\addons\ofxRealSense\src;$(RSSDK_ROOT)\include;$(OVRVISION_WINDOWS_ROOT)\include;$(DARKNET_ROOT)\src;$(CV_ROOT)\build\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -166,8 +166,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>yolo_cpp_dll.lib;LibOVR.lib;libOVRKernel.lib;ovrvision64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OF_ROOT)\addons\ofxOculusRiftCV1\libs\LibOVR\libs\Windows\x64\Release\VS2015;$(OF_ROOT)\addons\ofxOculusRiftCV1\libs\LibOVRKernel\libs\Windows\x64\Release\VS2015;$(DARKNET_ROOT)\build\darknet\x64;$(OVRVISION_WINDOWS_ROOT)\bin\x64;$(RSSDK_ROOT)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yolo_cpp_dll.lib;LibOVR.lib;libOVRKernel.lib;ovrvision64.lib;opencv_world331.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OF_ROOT)\addons\ofxOculusRiftCV1\libs\LibOVR\libs\Windows\x64\Release\VS2015;$(OF_ROOT)\addons\ofxOculusRiftCV1\libs\LibOVRKernel\libs\Windows\x64\Release\VS2015;$(DARKNET_ROOT)\build\darknet\x64;$(OVRVISION_WINDOWS_ROOT)\bin\x64;$(RSSDK_ROOT)\lib\x64;$(CV_ROOT)\build\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
