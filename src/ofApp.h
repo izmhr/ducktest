@@ -7,7 +7,6 @@
 #include "ofxGui.h"
 #include "OvrPro.h"
 
-
 //to restore and position and size data of those objects which will show at OculusCv1
 struct posAndSize_
 {
@@ -29,16 +28,18 @@ struct posAndSize_
 class ofApp : public ofBaseApp {
 
 private:
-	float ovrw;
-	float ovrh;
-	float ovrwt;
-	float ovrht;
-	float probability;
-	//ofTrueTypeFont verdana;	
+	// basic things
+	ofxRealSense realsense;
+	ofxOculusRiftCV1 cv1;
+	OvrPro ovrPro;
 	ofxYolo2 yolo;
+
+	// REALSENSE buffers
 	ofPixels colorFromRealsense;
-	ofTexture colorInDepth, depthInColor;
-	ofRectangle bounds;
+	ofTexture depthInColor/*, colorInDepth, */;
+
+	// about HMD posture and position.
+	ofVec3f up;
 	ofVec3f position;
 	ofQuaternion orientation;
 	struct axis_
@@ -48,9 +49,15 @@ private:
 		ofVec3f z;
 	};
 	axis_ axis;
+	ofNode Node;
+
+	// using results, draw texts.
+	float probability = 0.0f;	//when the result's prob larger than this ,the box shows;  
 	std::vector<bbox_t> lastResults;
 	std::vector<posAndSize_> planes;
+	ofImage textImage[23];
 
+	// GUI THINGS
 	ofParameter<float> xp;
 	ofParameter<float> yp;
 	ofParameter<float> zp;
@@ -63,17 +70,25 @@ private:
 	ofParameter<float> gapy;
 	ofParameter<float> sofa;
 	ofxPanel gui;
-	ofVec3f up;
-	ofImage obj[23];
-	ofPoint tlx;
-	ofPoint tly;
-	ofPoint brx;
-	ofPoint bry;
-	ofPoint tlx1;
-	ofPoint tly1;
-	ofPoint brx1;
-	ofPoint bry1;
 
+	// parameters for CV1 draw
+	ofRectangle cv1DrawBounds;
+
+	// parameters for OVRVISION draw
+	float ovrw;
+	float ovrh;
+	float ovrwt;
+	float ovrht;
+	ofPoint tlx_l;
+	ofPoint tly_l;
+	ofPoint brx_l;
+	ofPoint bry_l;
+	ofPoint tlx_r;
+	ofPoint tly_r;
+	ofPoint brx_r;
+	ofPoint bry_r;
+
+	// for scene transition
 	float alphavalue = 1.0f;
 	float alphavalue_ = 0.0f;
 	int alphaCam = 255;
@@ -81,6 +96,14 @@ private:
 	bool isCamVisible = true;
 	bool isTextVisible = false;
 
+	// -------------------------------------
+	// public FUNCTIONS
+	std::vector<posAndSize_> getPositionOfObj();
+	void drawNameAndBoxFromYolo();     //draw box on screen, the range of prob is from 0 to 1;
+	void billboarding(ofVec3f & position, axis_ & axis);
+	void drawPlane();
+	void drawOvrvisionSceneLeft();
+	void drawOvrvisionSceneRight();
 	void updateAlpha();
 
 public:
@@ -101,15 +124,4 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-	std::vector<posAndSize_> getPositionOfObj();
-	void drawNameAndBoxFromYolo();     //draw box on screen, the range of prob is from 0 to 1;
-	void billboarding(ofVec3f & position, axis_ & axis);
-	void drawplane();
-	void drawovrvisionsceneleft();
-	void drawovrvisionsceneright();
-	ofxRealSense realsense;
-	ofxOculusRiftCV1 cv1;
-	OvrPro ovrPro;
-	ofCamera cam;
-	ofNode Node;
 };

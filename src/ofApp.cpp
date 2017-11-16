@@ -7,7 +7,6 @@ void ofApp::setup() {
 	realsense.open();            //open the camera
 	//set up yolo
 	yolo.setup();
-	probability = 0.0;           //when the result's prob larger than this ,the box shows;  
 	//set up and open OculusRiftCv1
 	bool bOK = cv1.init();
 	if (!bOK) {
@@ -15,7 +14,7 @@ void ofApp::setup() {
 	}
 	else {
 		ofLogNotice() << "Initialized OculusRiftCV1";
-		bounds = cv1.getHMDSize();
+		cv1DrawBounds = cv1.getHMDSize();
 	}
 	//set up ovrpro
 	ovrPro.init();
@@ -34,7 +33,7 @@ void ofApp::setup() {
 	gui.add(zdp); gui.add(sizep); gui.add(ztexture); gui.add(gap); gui.add(gapy); gui.add(sofa);
 	//load image file
 	for (int i = 0; i < 22; i++) {
-		obj[i].loadImage(ofToString(i) + ".png");
+		textImage[i].loadImage(ofToString(i) + ".png");
 	}
 	//allocate
 	colorFromRealsense.allocate(640, 480, OF_PIXELS_RGB);
@@ -67,14 +66,14 @@ void ofApp::update() {
 	billboarding(position, axis);
 
 	//set 2d position for ovr texture 
-	tlx = (axis.x * -ovrwt + axis.y * ovrht);
-	tly = (axis.x * ovrwt + axis.y *  ovrht);
-	brx = (axis.x * ovrwt + axis.y * -ovrht);
-	bry = (axis.x * -ovrwt + axis.y * -ovrht);
-	tlx1 = (axis.x * (-ovrwt + gap) + axis.y * (ovrht + gapy));
-	tly1 = (axis.x * (ovrwt + gap) + axis.y * (ovrht + gapy));
-	brx1 = (axis.x * (ovrwt + gap) + axis.y * (-ovrht + gapy));
-	bry1 = (axis.x * (-ovrwt + gap) + axis.y * (-ovrht + gapy));
+	tlx_l = (axis.x * -ovrwt + axis.y * ovrht);
+	tly_l = (axis.x * ovrwt + axis.y *  ovrht);
+	brx_l = (axis.x * ovrwt + axis.y * -ovrht);
+	bry_l = (axis.x * -ovrwt + axis.y * -ovrht);
+	tlx_r = (axis.x * (-ovrwt + gap) + axis.y * (ovrht + gapy));
+	tly_r = (axis.x * (ovrwt + gap) + axis.y * (ovrht + gapy));
+	brx_r = (axis.x * (ovrwt + gap) + axis.y * (-ovrht + gapy));
+	bry_r = (axis.x * (-ovrwt + gap) + axis.y * (-ovrht + gapy));
 }
 
 //--------------------------------------------------------------
@@ -102,10 +101,10 @@ void ofApp::draw() {
 	cv1.end(ovrEye_Right);
 
 	//display the stereo view in the OF window (optional)
-	cv1.draw(0, 480, bounds.width, bounds.height);
+	cv1.draw(0, 480, cv1DrawBounds.width, cv1DrawBounds.height);
 
 	//draw gui
-	gui.setPosition(bounds.width, 480);
+	gui.setPosition(cv1DrawBounds.width, 480);
 	gui.draw();
 }
 
@@ -113,10 +112,10 @@ void ofApp::drawSceneLeft() {
 	ofPushMatrix;
 	ofTranslate(position);
 	ofSetColor(alphaCam, alphaCam, alphaCam);
-	drawovrvisionsceneleft();
+	drawOvrvisionSceneLeft();
 	ofSetColor(255, 255, 255);
 	ofFill();
-	drawplane();
+	drawPlane();
 	ofPopMatrix;
 }
 
@@ -124,10 +123,10 @@ void ofApp::drawSceneRight() {
 	ofPushMatrix;
 	ofTranslate(position);
 	ofSetColor(alphaCam, alphaCam, alphaCam);
-	drawovrvisionsceneright();
+	drawOvrvisionSceneRight();
 	ofSetColor(255, 255, 255);
 	ofFill();
-	drawplane();
+	drawPlane();
 	ofPopMatrix;
 }
 
@@ -203,30 +202,30 @@ void ofApp::billboarding(ofVec3f & position, axis_ & axis) {
 	axis.z = Node.getLookAtDir();
 }
 
-void ofApp::drawplane() {
+void ofApp::drawPlane() {
 	//ofEnableDepthTest();
 	ofSetColor(255, 255, 255, alphaText);
 	for (auto& i : planes) {
-		obj[i.number].getTextureReference().bind();
-		i.plane.mapTexCoordsFromTexture(obj[i.number].getTexture());
-		i.plane.resizeToTexture(obj[i.number].getTexture(), i.size / sizep);
+		textImage[i.number].getTextureReference().bind();
+		i.plane.mapTexCoordsFromTexture(textImage[i.number].getTexture());
+		i.plane.resizeToTexture(textImage[i.number].getTexture(), i.size / sizep);
 		i.plane.draw();
-		obj[i.number].getTextureReference().unbind();
+		textImage[i.number].getTextureReference().unbind();
 	}
 	ofSetColor(255, 255, 255, 255);
 	//ofDisableDepthTest();
 }
 
 
-void ofApp::drawovrvisionsceneleft() {
+void ofApp::drawOvrvisionSceneLeft() {
 	ofTranslate(axis.z * ztexture);
-	ovrPro.texL.draw(tlx, tly, brx, bry);
+	ovrPro.texL.draw(tlx_l, tly_l, brx_l, bry_l);
 	ofTranslate(axis.z * -ztexture);
 }
 
-void ofApp::drawovrvisionsceneright() {
+void ofApp::drawOvrvisionSceneRight() {
 	ofTranslate(axis.z * ztexture);
-	ovrPro.texR.draw(tlx1, tly1, brx1, bry1);
+	ovrPro.texR.draw(tlx_r, tly_r, brx_r, bry_r);
 	ofTranslate(axis.z * -ztexture);
 }
 
