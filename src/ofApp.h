@@ -105,6 +105,7 @@ private:
 	void drawOvrvisionSceneLeft();
 	void drawOvrvisionSceneRight();
 	void updateAlpha();
+	void showFPS();
 
 public:
 	void setup();

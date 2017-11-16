@@ -8,7 +8,7 @@ void ofApp::setup() {
 
 	//set up yolo
 	yolo.setup();
-	
+
 	//set up and open OculusRiftCv1
 	bool bOK = cv1.init();
 	if (!bOK) {
@@ -18,7 +18,7 @@ void ofApp::setup() {
 		ofLogNotice() << "Initialized OculusRiftCV1";
 		cv1DrawBounds = cv1.getHMDSize();
 	}
-	
+
 	//set up ovrpro
 	ovrPro.init();
 	ovrw = ovrPro.ovr_camWidth;
@@ -35,15 +35,15 @@ void ofApp::setup() {
 	gap.set("OvrGapX", 0.048, -0.2, 0.2); gapy.set("OvrGapY", 0.004, -0.2, 0.2);
 	gui.setup(); gui.add(xp); gui.add(xdp); gui.add(yp); gui.add(ydp); gui.add(zp);
 	gui.add(zdp); gui.add(sizep); gui.add(ztexture); gui.add(gap); gui.add(gapy); gui.add(sofa);
-	
+
 	//load image file
 	for (int i = 0; i < 22; i++) {
 		textImage[i].loadImage(ofToString(i) + ".png");
 	}
-	
+
 	//allocate
 	colorFromRealsense.allocate(640, 480, OF_PIXELS_RGB);
-	
+
 	//set up dir
 	up.set(0.f, 1.f, 0.f);
 }
@@ -88,6 +88,7 @@ void ofApp::update() {
 void ofApp::draw() {
 	// reset background
 	ofBackground(200);
+	showFPS();
 
 	//draw color image on top left
 	realsense.drawColor(0, 0);
@@ -269,6 +270,13 @@ void ofApp::updateAlpha()
 	}
 	alphaCam = int(255.0f * alphavalue);
 	alphaText = int(255.0f * alphavalue_);
+}
+
+void ofApp::showFPS()
+{
+	std::stringstream strm;
+	strm << "fps: " << ofGetFrameRate();
+	ofSetWindowTitle(strm.str());
 }
 
 
