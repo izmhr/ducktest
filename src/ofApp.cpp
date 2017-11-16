@@ -268,17 +268,17 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-	if (key == 'a')
+	if (key == 'a' || key == 49)
 	{
 		isCamVisible = false;
 		isTextVisible = true;
 	}
-	if (key == 's')
+	if (key == 's' || key == 50)
 	{
 		isCamVisible = true;
 		isTextVisible = false;
 	}
-	if (key == 'd')
+	if (key == 'd' || key == 48)
 	{
 		isCamVisible = true;
 		isTextVisible = true;
