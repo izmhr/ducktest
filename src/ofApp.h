@@ -57,7 +57,7 @@ private:
 	std::vector<posAndSize_> planes;
 	ofImage textImage[23];
 
-	// GUI THINGS
+	// GUI THINGS - for calibration.
 	ofParameter<float> xp;
 	ofParameter<float> yp;
 	ofParameter<float> zp;

@@ -5,8 +5,10 @@ void ofApp::setup() {
 	// setup realsense camera
 	realsense.setup(true, true);
 	realsense.open();            //open the camera
+
 	//set up yolo
 	yolo.setup();
+	
 	//set up and open OculusRiftCv1
 	bool bOK = cv1.init();
 	if (!bOK) {
@@ -16,13 +18,15 @@ void ofApp::setup() {
 		ofLogNotice() << "Initialized OculusRiftCV1";
 		cv1DrawBounds = cv1.getHMDSize();
 	}
+	
 	//set up ovrpro
 	ovrPro.init();
 	ovrw = ovrPro.ovr_camWidth;
 	ovrh = ovrPro.ovr_camHeight;
 	ovrwt = ovrw / 1000;
 	ovrht = ovrh / 1000;
-	//set parameter
+
+	//set parameter - for calibration
 	xp.set("X", 0.45, 0, 10.0); xdp.set("+X", -0.05, -1.0, 1.0);
 	yp.set("Y", 0.6, 0, 10.0);	ydp.set("+Y", 0.12, -1.0, 1.0);
 	zp.set("Z", 1130, 0, 2000); zdp.set("+Z", 0.53, 0, 2.0);
@@ -31,27 +35,31 @@ void ofApp::setup() {
 	gap.set("OvrGapX", 0.048, -0.2, 0.2); gapy.set("OvrGapY", 0.004, -0.2, 0.2);
 	gui.setup(); gui.add(xp); gui.add(xdp); gui.add(yp); gui.add(ydp); gui.add(zp);
 	gui.add(zdp); gui.add(sizep); gui.add(ztexture); gui.add(gap); gui.add(gapy); gui.add(sofa);
+	
 	//load image file
 	for (int i = 0; i < 22; i++) {
 		textImage[i].loadImage(ofToString(i) + ".png");
 	}
+	
 	//allocate
 	colorFromRealsense.allocate(640, 480, OF_PIXELS_RGB);
+	
 	//set up dir
 	up.set(0.f, 1.f, 0.f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
+	// scene transition
 	updateAlpha();
+
 	//update for realsense camera
 	realsense.update();
 	colorFromRealsense = realsense.getColorPixelsRef();
 
-	//depthInColor.loadData(realsense.getDepthPixelsInColorFrame());
-	//realsensergb.loadData(colorFromRealsense);            
+	//depthInColor.loadData(realsense.getDepthPixelsInColorFrame());         
 
-	//recive detection results from yolo
+	//recieve detection results from yolo
 	lastResults = yolo.detect(colorFromRealsense);
 	//lastResults = yolo.tracking(lastResults);                   //add tracking option(optional)
 	planes = getPositionOfObj();//caculate the depth for objects
@@ -78,7 +86,9 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	// reset background
 	ofBackground(200);
+
 	//draw color image on top left
 	realsense.drawColor(0, 0);
 	//draw calabrated depth image on top right
@@ -110,23 +120,27 @@ void ofApp::draw() {
 
 void ofApp::drawSceneLeft() {
 	ofPushMatrix;
-	ofTranslate(position);
-	ofSetColor(alphaCam, alphaCam, alphaCam);
-	drawOvrvisionSceneLeft();
-	ofSetColor(255, 255, 255);
-	ofFill();
-	drawPlane();
+	{
+		ofTranslate(position);
+		ofSetColor(alphaCam, alphaCam, alphaCam);
+		drawOvrvisionSceneLeft();
+		ofSetColor(255, 255, 255);
+		ofFill();
+		drawPlane();
+	}
 	ofPopMatrix;
 }
 
 void ofApp::drawSceneRight() {
 	ofPushMatrix;
-	ofTranslate(position);
-	ofSetColor(alphaCam, alphaCam, alphaCam);
-	drawOvrvisionSceneRight();
-	ofSetColor(255, 255, 255);
-	ofFill();
-	drawPlane();
+	{
+		ofTranslate(position);
+		ofSetColor(alphaCam, alphaCam, alphaCam);
+		drawOvrvisionSceneRight();
+		ofSetColor(255, 255, 255);
+		ofFill();
+		drawPlane();
+	}
 	ofPopMatrix;
 }
 
@@ -192,7 +206,6 @@ std::vector<posAndSize_> ofApp::getPositionOfObj() {
 	return planes;
 }
 
-
 void ofApp::billboarding(ofVec3f & position, axis_ & axis) {
 	cv1.getHMDTrackingState(position, orientation);
 	Node.setGlobalPosition(position);
@@ -215,7 +228,6 @@ void ofApp::drawPlane() {
 	ofSetColor(255, 255, 255, 255);
 	//ofDisableDepthTest();
 }
-
 
 void ofApp::drawOvrvisionSceneLeft() {
 	ofTranslate(axis.z * ztexture);
